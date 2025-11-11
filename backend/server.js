@@ -17,7 +17,7 @@ const DATA_FILE = join(__dirname, 'todos.json');
 // Middleware
 app.use(cors(
   {
-    origin:"http://express-server:5173" 
+    origin:"*" 
   }
 ));
 app.use(express.json());
