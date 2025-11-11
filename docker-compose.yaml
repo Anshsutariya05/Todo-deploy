@@ -1,0 +1,24 @@
+
+services:
+  server:
+    build: ./backend
+    container_name: express-server
+    ports:
+      - "5000:5000"
+    networks:
+      - connection
+    
+    restart: unless-stopped
+  client:
+    build: ./frontend
+    container_name: react-client
+    ports:
+      - "3000:3000"
+    networks:
+      - connection
+    depends_on:
+      - server
+    restart: unless-stopped
+networks:
+  connection:
+    driver: bridge
