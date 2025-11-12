@@ -44,8 +44,10 @@ async function writeTodos(todos) {
 // Get all todos
 app.get('/api/todos', async (req, res) => {
   try {
-    const todos = await readTodos();
-    res.json(todos);
+    // const todos = await readTodos();
+    res.json({
+      msg:"hlellodas"
+    });
   } catch (error) {
     // console.log("error bro..");
     res.status(500).json({ error: 'Failed to fetch todos' });
