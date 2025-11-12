@@ -47,7 +47,7 @@ app.get('/api/todos', async (req, res) => {
     const todos = await readTodos();
     res.json(todos);
   } catch (error) {
-    console.log("error bro");
+    // console.log("error bro");
     res.status(500).json({ error: 'Failed to fetch todos' });
   }
 });
