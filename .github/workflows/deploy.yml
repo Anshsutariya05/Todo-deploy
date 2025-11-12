@@ -1,0 +1,52 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Create SSH key file
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
+          chmod 600 key.pem
+
+      - name: Deploy to EC2
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
+        run: |
+          ssh -i key.pem -o StrictHostKeyChecking=no ${EC2_USERNAME}@${EC2_HOST} << 'EOF'
+            # Navigate to app directory
+            cd /home/ubuntu/todo-app || mkdir -p /home/ubuntu/todo-app && cd /home/ubuntu/todo-app
+            
+            # Clone or pull latest code
+            if [ -d ".git" ]; then
+              git pull origin main
+            else
+              git clone https://github.com/Anshsutariya05/Todo-deploy.git .
+            fi
+            
+            # Stop and remove existing containers
+            docker-compose down || true
+            
+            # Build and start containers
+            docker-compose up -d --build
+            
+            # Clean up old images
+            docker image prune -f
+          EOF
+
+      - name: Cleanup
+        if: always()
+        run: rm -f key.pem
+
+      - name: Deployment Status
+        run: echo "Deployment completed successfully!"
