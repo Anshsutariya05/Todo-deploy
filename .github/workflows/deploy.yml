@@ -25,7 +25,7 @@ jobs:
         run: |
           ssh -i key.pem -o StrictHostKeyChecking=no ${EC2_USERNAME}@${EC2_HOST} << 'EOF'
             # Navigate to app directory
-            cd /home/ubuntu/todo-app || mkdir -p /home/ubuntu/todo-app && cd /home/ubuntu/todo-app
+            cd /home/ubuntu/Todo-deploy || mkdir -p /home/ubuntu/Todo-deploy && cd /home/ubuntu/Todo-deploy
             
             # Clone or pull latest code
             if [ -d ".git" ]; then
